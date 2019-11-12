@@ -1,0 +1,63 @@
+10
+
+dir
+0
+https://192.168.100.39/svn/Integration/ASVPortal/nbproject
+https://192.168.100.39/svn/Integration
+add
+
+
+
+
+
+has-props
+has-prop-mods
+svn:special svn:externals svn:needs-lock
+
+
+
+
+
+
+
+
+
+
+
+812ceedf-4970-ee40-a28e-b9e202e2c964
+
+ant-deploy.xml
+file
+
+
+
+add
+
+build-impl.xml
+file
+
+
+
+add
+
+genfiles.properties
+file
+
+
+
+add
+
+project.properties
+file
+
+
+
+add
+
+project.xml
+file
+
+
+
+add
+

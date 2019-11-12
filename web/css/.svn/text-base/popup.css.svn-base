@@ -1,0 +1,5 @@
+/* CSS Document */
+
+.norm_login_text {
+	font-size: 10pt; font-family: Tahoma,Verdana, Geneva, Arial, helvetica, sans-serif;
+}

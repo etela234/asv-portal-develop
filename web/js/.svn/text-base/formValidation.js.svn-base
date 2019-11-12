@@ -1,0 +1,663 @@
+$(document).ready(function() {
+	//USER LOGIN	
+  	$("#loginForm").validate({
+        rules: {
+          EMAIL: { // simple rule, converted to {required:true} 
+			  required: true,   
+			  email: true,
+		  },
+		  PASSWORD: "required",// simple rule, converted to {required:true}
+        },
+        messages: {
+          EMAIL: "Please enter a valid email address",
+		  PASSWORD: "Please enter a valid password",
+        },
+		submitHandler: function(form) { 
+			var email = $("input#EMAIL").val();  
+			var password = $("input#PASSWORD").val();
+			var dataString = 'EMAIL='+email+'&PASSWORD='+password+'&action=0';
+			$.ajax({   
+			  type: "POST",   
+			  url: "processRequests.jsp",   
+			  data: dataString,  
+			  cache: false,
+			  /*
+			   beforeSubmit: function() {
+				$('input').attr("disabled", true);
+				$("#uploadResponse").show('slow');
+				$('#uploadResponse').append("<img src='images/icons/ajax-loader.gif' />");
+		  		},
+				*/
+			  success: function(response) {   
+				if (response ==0){	 //Registration
+					window.location = 'welcome.jsp'
+				}else if (response ==1){  //Registration
+					$('#login_response').html("<div id='message' class='success_login'></div>"); 
+					$('#message').append("<img src='images/cancel.png'/>  Login details not valid, please try again!!!<br/>")
+					$('#message').hide()   
+					$('#message').fadeIn(500, function() {   
+					  $('#message').append("");
+					}); 
+				}else if (response ==2){  //Registration
+					$('#login_response').html("<div id='message' class='success_login'></div>"); 
+					$('#message').append("<img src='images/cancel.png'/>  Error ocurred during processing, try again!!!<br/>")
+					$('#message').hide()   
+					$('#message').fadeIn(500, function() {   
+					  $('#message').append("");
+					}); 
+				}else if (response ==3){	 //Registration
+					window.location = 'modifyAccount.jsp'
+				}
+			  }
+			
+			});
+		return false;
+		}
+  	});
+	
+	//CHANGE PASSWORD
+	$("#CHANGE_PASSWORD").validate({
+        rules: {
+          OLD_PASSWORD: "required",// simple rule, converted to {required:true}
+		  NEW_PASSWORD: "required",// simple rule, converted to {required:true}       
+		  C_NEW_PASSWORD: { // simple rule, converted to {required:true}     
+			  required: true,  
+			  equalTo: "#NEW_PASSWORD"
+		 }
+        },
+        messages: {
+          OLD_PASSWORD: "Please enter your old password",
+		  NEW_PASSWORD: "Please enter your new password",
+        },
+		submitHandler: function(form) { 
+			var old_password = $("input#OLD_PASSWORD").val();  
+			var new_password = $("input#NEW_PASSWORD").val();
+			var user_id = $("input#USER_ID").val();
+				var dataString = 'OLD_PASSWORD='+old_password+'&NEW_PASSWORD='+new_password+'&USER_ID='+user_id+'&action=1';
+			$.ajax({   
+			  type: "POST",   
+			  url: "processRequests.jsp",   
+			  data: dataString,  
+			  cache: false,
+			  /*
+			   beforeSubmit: function() {
+				$('input').attr("disabled", true);
+				$("#uploadResponse").show('slow');
+				$('#uploadResponse').append("<img src='images/icons/ajax-loader.gif' />");
+		  		},
+				*/
+			  success: function(response) {   
+				if (response ==0){	 //Registration
+					$('#save_password').html("<div id='message' class='success'></div>"); 
+					$('#message').append("<img src='images/tick.png'/> Your password has successfully been changed!!!<br/>")
+					$('#message').hide()   
+					$('#message').fadeIn(500, function() {   
+					  $('#message').append(""); 
+					}); 
+					$('input[type=text]').val('');//to clear form values
+					$('select').val('');
+				}
+				else if (response ==1){  //Registration
+					$('#save_password').html("<div id='message' class='success'></div>"); 
+					$('#message').append("<img src='images/cancel.png'/>  An error occurred while changing your password, please try again!!!<br/>")
+					$('#message').hide()   
+					$('#message').fadeIn(500, function() {   
+					  $('#message').append("");
+					}); 
+				}
+				else if (response ==2){  //Registration
+					$('#save_password').html("<div id='message' class='success'></div>"); 
+					$('#message').append("<img src='images/cancel.png'/>You supplied an invalid old password!!!<br/>")
+					$('#message').hide()   
+					$('#message').fadeIn(500, function() {   
+					  $('#message').append("");
+					}); 
+				}else if (response ==4){  //Registration
+					$('#save_password').html("<div id='message' class='success'></div>"); 
+					$('#message').append("<img src='images/cancel.png'/>  Password Complexity Not Okay!!!<br/>")
+					$('#message').hide()   
+					$('#message').fadeIn(500, function() {   
+					  $('#message').append("");
+					}); 
+				}else if (response ==5){  //Registration
+					$('#save_password').html("<div id='message' class='success'></div>"); 
+					$('#message').append("<img src='images/cancel.png'/>  The password is lesser than required length!!!<br/>")
+					$('#message').hide()   
+					$('#message').fadeIn(500, function() {   
+					  $('#message').append("");
+					}); 
+				}
+			  }
+			
+			});
+		return false;
+		}
+  	}); 
+	
+	  //CREATE USER TYPE
+	$("#CREATE_USER_TYPE").validate({
+        rules: {
+          USER_TYPE_NAME: "required",// simple rule, converted to {required:true}
+        },
+        messages: {
+          USER_TYPE_NAME: "Please enter a user type name",
+        },
+		submitHandler: function(form) { 
+			var user_type_name = $("input#USER_TYPE_NAME").val();  
+			var user_id = $("input#USER_ID").val();
+				var dataString = 'USER_TYPE_NAME='+user_type_name+'&USER_ID='+user_id+'&action=2';
+			$.ajax({   
+			  type: "POST",   
+			  url: "processRequests.jsp",   
+			  data: dataString,  
+			  cache: false,
+			  /*
+			   beforeSubmit: function() {
+				$('input').attr("disabled", true);
+				$("#uploadResponse").show('slow');
+				$('#uploadResponse').append("<img src='images/icons/ajax-loader.gif' />");
+		  		},
+				*/
+			  success: function(response) {   
+				if (response ==0){	 //Registration
+					$('#user_type_response').html("<div id='message' class='success'></div>"); 
+					$('#message').append("<img src='images/tick.png'/>User type has been successfully created!!!<br/>")
+					$('#message').hide()   
+					$('#message').fadeIn(500, function() {   
+					  $('#message').append(""); 
+					}); 
+					$('input[type=text]').val('');//to clear form values
+					$('select').val('');
+				}
+				else if (response ==1){  //Registration
+					$('#user_type_response').html("<div id='message' class='success'></div>"); 
+					$('#message').append("<img src='images/cancel.png'/>Duplicate entries, please try again!!!<br/>")
+					$('#message').hide()   
+					$('#message').fadeIn(500, function() {   
+					  $('#message').append("");
+					}); 
+				}
+				else if (response ==2){  //Registration
+					$('#user_type_response').html("<div id='message' class='success'></div>"); 
+					$('#message').append("<img src='images/cancel.png'/>An error occurred while processing request, please try again!!!<br/>")
+					$('#message').hide()   
+					$('#message').fadeIn(500, function() {   
+					  $('#message').append("");
+					}); 
+				}
+			  }
+			
+			});
+		return false;
+		}
+  	}); 
+	
+	//CREATE USER
+	$("#CREATE_USER").validate({
+        rules: {
+          USER_TYPE_NAME: "required",// simple rule, converted to {required:true}
+		  FIRST_NAME: "required",// simple rule, converted to {required:true}
+		  LAST_NAME: "required",// simple rule, converted to {required:true}
+		  GENDER: "required",// simple rule, converted to {required:true}
+		  COMPANY: "required",// simple rule, converted to {required:true}
+		  ADDRESS: "required",// simple rule, converted to {required:true}
+		  PHONE_NUM: "required",// simple rule, converted to {required:true}
+		  EMAIL: { // simple rule, converted to {required:true} 
+			  required: true,   
+			  email: true,
+		  },
+		  /*PASSWORD: "required",// simple rule, converted to {required:true}    
+		  C_PASSWORD: { // simple rule, converted to {required:true}     
+			  required: true,  
+			  equalTo: "#PASSWORD"
+		 }   */
+        },
+        messages: {
+          USER_TYPE_NAME: "Please enter a user type name",
+		  EMAIL: "Please enter a valid email",
+		  //PASSWORD: "Password cannot be empty"
+		  
+        },
+		submitHandler: function(form) { 
+			var user_id = $("input#USER_ID").val();  		
+			var first_name = $("input#FIRST_NAME").val(); 
+			var last_name = $("input#LAST_NAME").val();  
+			var email = $("input#EMAIL").val();
+			/*var password = $("input#PASSWORD").val();*/
+			/*var gender = $("input#GENDER").val();*/
+			var gender = $("select#GENDER").val();
+			var company = $("select#COMPANY_NAME").val();
+			var company_add = $("textarea#COMPANY_ADDRESS").val();
+			var user_type_name = $("select#USER_TYPE_NAME").val();
+			var phone_num = $("input#PHONE_NUM").val();
+			//var dataString = 'USER_ID='+user_id+'&FIRST_NAME='+first_name+'&LAST_NAME='+last_name+'&EMAIL='+email+'&PASSWORD='+password+'&GENDER='+gender+'&PHONE_NUM='+phone_num+'&COMPANY_NAME='+company+'&COMPANY_ADDRESS='+company_add+'&USER_TYPE_NAME='+user_type_name+'&action=3';
+			var dataString = 'USER_ID='+user_id+'&FIRST_NAME='+first_name+'&LAST_NAME='+last_name+'&EMAIL='+email+'&GENDER='+gender+'&PHONE_NUM='+phone_num+'&COMPANY_NAME='+company+'&COMPANY_ADDRESS='+company_add+'&USER_TYPE_NAME='+user_type_name+'&action=3';
+			$.ajax({   
+			  type: "POST",   
+			  url: "processRequests.jsp",   
+			  data: dataString,  
+			  cache: false,
+			  /*
+			   beforeSubmit: function() {
+				$('input').attr("disabled", true);
+				$("#uploadResponse").show('slow');
+				$('#uploadResponse').append("<img src='images/icons/ajax-loader.gif' />");
+		  		},
+				*/
+			  success: function(response) {   
+				if (response ==0){	 //Registration
+					$('#create_user_message').html("<div id='message' class='success'></div>"); 
+					$('#message').append("<img src='images/tick.png'/> User has been created successfully!!!<br/>")
+					$('#message').hide()   
+					$('#message').fadeIn(500, function() {   
+					  $('#message').append(""); 
+					}); 
+					$('input[type=text]').val('');//to clear form values
+					$('input[type=password]').val('');//to clear form values
+					$('select').val('');
+					$('textarea').val('');
+				}
+				else if (response ==1){  //Registration
+					$('#create_user_message').html("<div id='message' class='success'></div>"); 
+					$('#message').append("<img src='images/cancel.png'/> User already exist, try again!!!<br/>")
+					$('#message').hide()   
+					$('#message').fadeIn(500, function() {   
+					  $('#message').append("");
+					}); 
+				}
+				else if (response ==2){  //Registration
+					$('#create_user_message').html("<div id='message' class='success'></div>"); 
+					$('#message').append("<img src='images/cancel.png'/>  Error ocurred while processing request, please try again!!!<br/>")
+					$('#message').hide()   
+					$('#message').fadeIn(500, function() {   
+					  $('#message').append("");
+					}); 
+				}else if (response ==4){  //Registration
+					$('#create_user_message').html("<div id='message' class='success'></div>"); 
+					$('#message').append("<img src='images/cancel.png'/>  Password Complexity Not Okay!!!<br/>")
+					$('#message').hide()   
+					$('#message').fadeIn(500, function() {   
+					  $('#message').append("");
+					}); 
+				}else if (response ==5){  //Registration
+					$('#create_user_message').html("<div id='message' class='success'></div>"); 
+					$('#message').append("<img src='images/cancel.png'/>  The password is lesser than required length!!!<br/>")
+					$('#message').hide()   
+					$('#message').fadeIn(500, function() {   
+					  $('#message').append("");
+					}); 
+				}
+			  }
+			
+			});
+		return false;
+		}
+  	}); 
+	
+	//NIBSS CREATE USER
+	$("#NIBSS_CREATE_USER").validate({
+        rules: {
+          USER_TYPE_NAME: "required",// simple rule, converted to {required:true}
+		  FIRST_NAME: "required",// simple rule, converted to {required:true}
+		  LAST_NAME: "required",// simple rule, converted to {required:true}
+		  GENDER: "required",// simple rule, converted to {required:true}
+		  COMPANY: "required",// simple rule, converted to {required:true}
+		  ADDRESS: "required",// simple rule, converted to {required:true}
+		  PHONE_NUM: "required",// simple rule, converted to {required:true}
+		  EMAIL: { // simple rule, converted to {required:true} 
+			  required: true,   
+			  email: true,
+		  },
+		  /*PASSWORD: "required",// simple rule, converted to {required:true}    
+		  C_PASSWORD: { // simple rule, converted to {required:true}     
+			  required: true,  
+			  equalTo: "#PASSWORD"
+		 }   */
+        },
+        messages: {
+          USER_TYPE_NAME: "Please enter a user type name",
+		  EMAIL: "Please enter a valid email",
+		  //PASSWORD: "Password cannot be empty"
+		  
+        },
+		submitHandler: function(form) { 
+			var user_id = $("input#USER_ID").val();  		
+			var first_name = $("input#FIRST_NAME").val(); 
+			var last_name = $("input#LAST_NAME").val();  
+			var email = $("input#EMAIL").val();
+			/*var password = $("input#PASSWORD").val();*/
+			var gender = $("select#GENDER").val();
+			var company = $("select#COMPANY_NAME").val();
+			var company_add = $("textarea#COMPANY_ADDRESS").val();
+			var user_type_name = $("select#USER_TYPE_NAME").val();
+			var phone_num = $("input#PHONE_NUM").val();
+			//var dataString = 'USER_ID='+user_id+'&FIRST_NAME='+first_name+'&LAST_NAME='+last_name+'&EMAIL='+email+'&PASSWORD='+password+'&GENDER='+gender+'&PHONE_NUM='+phone_num+'&COMPANY_NAME='+company+'&COMPANY_ADDRESS='+company_add+'&USER_TYPE_NAME='+user_type_name+'&action=3';
+			var dataString = 'USER_ID='+user_id+'&FIRST_NAME='+first_name+'&LAST_NAME='+last_name+'&EMAIL='+email+'&GENDER='+gender+'&PHONE_NUM='+phone_num+'&COMPANY_NAME='+company+'&COMPANY_ADDRESS='+company_add+'&USER_TYPE_NAME='+user_type_name+'&action=3a';
+			$.ajax({   
+			  type: "POST",   
+			  url: "processRequests.jsp",   
+			  data: dataString,  
+			  cache: false,
+			  /*
+			   beforeSubmit: function() {
+				$('input').attr("disabled", true);
+				$("#uploadResponse").show('slow');
+				$('#uploadResponse').append("<img src='images/icons/ajax-loader.gif' />");
+		  		},
+				*/
+			  success: function(response) {   
+				if (response ==0){	 //Registration
+					$('#create_user_message').html("<div id='message' class='success'></div>"); 
+					$('#message').append("<img src='images/tick.png'/> User has been created successfully!!!<br/>")
+					$('#message').hide()   
+					$('#message').fadeIn(500, function() {   
+					  $('#message').append(""); 
+					}); 
+					$('input[type=text]').val('');//to clear form values
+					$('input[type=password]').val('');//to clear form values
+					$('select').val('');
+					$('textarea').val('');
+				}
+				else if (response ==1){  //Registration
+					$('#create_user_message').html("<div id='message' class='success'></div>"); 
+					$('#message').append("<img src='images/cancel.png'/> User already exist, try again!!!<br/>")
+					$('#message').hide()   
+					$('#message').fadeIn(500, function() {   
+					  $('#message').append("");
+					}); 
+				}
+				else if (response ==2){  //Registration
+					$('#create_user_message').html("<div id='message' class='success'></div>"); 
+					$('#message').append("<img src='images/cancel.png'/>  Error ocurred while processing request, please try again!!!<br/>")
+					$('#message').hide()   
+					$('#message').fadeIn(500, function() {   
+					  $('#message').append("");
+					}); 
+				}else if (response ==4){  //Registration
+					$('#create_user_message').html("<div id='message' class='success'></div>"); 
+					$('#message').append("<img src='images/cancel.png'/>  Password Complexity Not Okay!!!<br/>")
+					$('#message').hide()   
+					$('#message').fadeIn(500, function() {   
+					  $('#message').append("");
+					}); 
+				}else if (response ==5){  //Registration
+					$('#create_user_message').html("<div id='message' class='success'></div>"); 
+					$('#message').append("<img src='images/cancel.png'/>  The password is lesser than required length!!!<br/>")
+					$('#message').hide()   
+					$('#message').fadeIn(500, function() {   
+					  $('#message').append("");
+					}); 
+				}
+			  }
+			
+			});
+		return false;
+		}
+  	}); 
+	
+	//CREATE MAIN MENU
+	$("#CREATE_MAIN_MENU").validate({
+        rules: {
+          MAIN_MENU_NAME: "required",// simple rule, converted to {required:true}
+		  MAIN_MENU_URL: "required",// simple rule, converted to {required:true}
+		  USER_TYPE_NAME: "required",// simple rule, converted to {required:true}
+        },
+        messages: {
+          MAIN_MENU_NAME: "Please enter a main menu name",
+		  MAIN_MENU_URL: "Please enter a main menu url",
+		  USER_TYPE_NAME: "Please specify a user type name",
+        },
+		submitHandler: function(form) { 
+			var main_menu_name = $("input#MAIN_MENU_NAME").val();  
+			var main_menu_url = $("input#MAIN_MENU_URL").val();  
+			var user_type_name = $("select#USER_TYPE_NAME").val();  
+			var user_id = $("input#USER_ID").val();
+			var dataString = 'MAIN_MENU_NAME='+main_menu_name+'&MAIN_MENU_URL='+main_menu_url+'&USER_TYPE_NAME='+user_type_name+'&USER_ID='+user_id+'&action=4';
+			$.ajax({   
+			  type: "POST",   
+			  url: "processRequests.jsp",   
+			  data: dataString,  
+			  cache: false,
+			  /*
+			   beforeSubmit: function() {
+				$('input').attr("disabled", true);
+				$("#uploadResponse").show('slow');
+				$('#uploadResponse').append("<img src='images/icons/ajax-loader.gif' />");
+		  		},
+				*/
+			  success: function(response) {   
+				if (response ==0){	 //Registration
+					$('#main_menu_response').html("<div id='message' class='success'></div>"); 
+					$('#message').append("<img src='images/tick.png'/>Main Menu has been successfully created!!!<br/>")
+					$('#message').hide()   
+					$('#message').fadeIn(500, function() {   
+					  $('#message').append(""); 
+					}); 
+					$('input[type=text]').val('');//to clear form values
+					$('input[type=password]').val('');//to clear form values
+					$('select').val('');
+				}
+				else if (response ==1){  //Registration
+					$('#main_menu_response').html("<div id='message' class='success'></div>"); 
+					$('#message').append("<img src='images/cancel.png'/>Duplicate entries, please try again!!!<br/>")
+					$('#message').hide()   
+					$('#message').fadeIn(500, function() {   
+					  $('#message').append("");
+					}); 
+				}
+				else if (response ==2){  //Registration
+					$('#main_menu_response').html("<div id='message' class='success'></div>"); 
+					$('#message').append("<img src='images/cancel.png'/>An error occurred while processing request, please try again!!!<br/>")
+					$('#message').hide()   
+					$('#message').fadeIn(500, function() {   
+					  $('#message').append("");
+					}); 
+				}
+			  }
+			
+			});
+		return false;
+		}
+  	}); 
+	
+	
+	//CREATE_SUB_MENU
+	$("#CREATE_SUB_MENU").validate({
+        rules: {
+          MAIN_MENU_NAME: "required",// simple rule, converted to {required:true}
+		  USER_TYPE_NAME: "required",// simple rule, converted to {required:true}
+		  SUB_MENU_NAME: "required",// simple rule, converted to {required:true}
+		  SUB_MENU_URL: "required",// simple rule, converted to {required:true}
+		  
+        },
+        messages: {
+          MAIN_MENU_NAME: "Please enter a main menu name",
+		  USER_TYPE_NAME: "Please specify a user type name",
+		  SUB_MENU_NAME: "Please enter a sub menu name",
+		  SUB_MENU_URL: "Please enter a sub menu url",
+		  
+        },
+		submitHandler: function(form) { 
+			var main_menu_name = $("select#MAIN_MENU_NAME").val(); 
+			var sub_menu_name = $("input#SUB_MENU_NAME").val();
+			var sub_menu_url = $("input#SUB_MENU_URL").val();  
+			var user_type_name = $("select#USER_TYPE_NAME").val();  
+			var user_id = $("input#USER_ID").val();
+			var dataString = 'MAIN_MENU_NAME='+main_menu_name+'&SUB_MENU_NAME='+sub_menu_name+'&SUB_MENU_URL='+sub_menu_url+'&USER_TYPE_NAME='+user_type_name+'&USER_ID='+user_id+'&action=5';
+			$.ajax({   
+			  type: "POST",   
+			  url: "processRequests.jsp",   
+			  data: dataString,  
+			  cache: false,
+			  /*
+			   beforeSubmit: function() {
+				$('input').attr("disabled", true);
+				$("#uploadResponse").show('slow');
+				$('#uploadResponse').append("<img src='images/icons/ajax-loader.gif' />");
+		  		},
+				*/
+			  success: function(response) {   
+				if (response ==0){	 //Registration
+					$('#sub_menu_response').html("<div id='message' class='success'></div>"); 
+					$('#message').append("<img src='images/tick.png'/>Sub Menu has been successfully created!!!<br/>")
+					$('#message').hide()   
+					$('#message').fadeIn(500, function() {   
+					  $('#message').append(""); 
+					}); 
+					$('input[type=text]').val('');//to clear form values
+					$('input[type=password]').val('');//to clear form values
+					$('select').val('');
+				}
+				else if (response ==1){  //Registration
+					$('#sub_menu_response').html("<div id='message' class='success'></div>"); 
+					$('#message').append("<img src='images/cancel.png'/>Duplicate entries, please try again!!!<br/>")
+					$('#message').hide()   
+					$('#message').fadeIn(500, function() {   
+					  $('#message').append("");
+					}); 
+				}
+				else if (response ==2){  //Registration
+					$('#sub_menu_response').html("<div id='message' class='success'></div>"); 
+					$('#message').append("<img src='images/cancel.png'/>An error occurred while processing request, please try again!!!<br/>")
+					$('#message').hide()   
+					$('#message').fadeIn(500, function() {   
+					  $('#message').append("");
+					}); 
+				}
+			  }
+			
+			});
+		return false;
+		}
+  	}); 
+	
+	//CONTACT NIBSS ADMIN
+  $("#CONTACT_NIBSS").validate({
+        rules: {
+          SUBJECT: "required",// simple rule, converted to {required:true}
+		  MESSAGE: "required",// simple rule, converted to {required:true}       
+        },
+        messages: {
+          SUBJECT: "Please enter your Subject",
+		  MESSAGE: "Please enter your Message",
+        },
+		submitHandler: function(form) { 
+			var subject = $("input#SUBJECT").val();  
+			var message = $("textarea#MESSAGE").val();
+			var user_id = $("input#USER_ID").val();
+			var dataString = 'SUBJECT='+subject+'&MESSAGE='+message+'&USER_ID='+user_id+'&action=6';
+			$.ajax({   
+			  type: "POST",   
+			  url: "processRequests.jsp",   
+			  data: dataString,  
+			  cache: false,
+			  /*
+			   beforeSubmit: function() {
+				$('input').attr("disabled", true);
+				$("#uploadResponse").show('slow');
+				$('#uploadResponse').append("<img src='images/icons/ajax-loader.gif' />");
+		  		},
+				*/
+			  success: function(response) {   
+				if (response ==0){	 //Registration
+					$('#save_message').html("<div id='message' class='success'></div>"); 
+					$('#message').append("<img src='images/tick.png'/> Your message has been successfully sent to NIBSS Admin!!!<br/>")
+					$('#message').hide()   
+					$('#message').fadeIn(500, function() {   
+					  $('#message').append(""); 
+					}); 
+					$('input[type=text]').val('');//to clear form values
+					$('textarea').val('');
+				}
+				else if (response ==1){  //Registration
+					$('#save_message').html("<div id='message' class='success'></div>"); 
+					$('#message').append("<img src='images/cancel.png'/>  Error ocurred while sending your message, please try again!!!<br/>")
+					$('#message').hide()   
+					$('#message').fadeIn(500, function() {   
+					  $('#message').append("");
+					}); 
+				}
+
+			  }
+			
+			});
+		return false;
+		}
+  	}); 
+	
+	//MANAGE SIGNATORY
+  $("#MANAGE_SIGNATORY").validate({
+        rules: {
+          ACTION: "required",// simple rule, converted to {required:true}
+		  REASON: "required",// simple rule, converted to {required:true}       
+        },
+        messages: {
+          ACTION: "Please select an action",
+		  REASON: "Please enter your Reason",
+        },
+		submitHandler: function(form) { 
+			var user_id = $("input#USER_ID").val();
+			var signature_id = $("input#SIGNATURE_ID").val();
+			var action = $("select#ACTION").val();
+			var reason = $("textarea#REASON").val();
+			var dataString = 'ACTION='+action+'&REASON='+reason+'&USER_ID='+user_id+'&SIGNATURE_ID='+signature_id+'&action=7';
+			$.ajax({   
+			  type: "POST",   
+			  url: "processRequests.jsp",   
+			  data: dataString,  
+			  cache: false,
+			  /*
+			   beforeSubmit: function() {
+				$('input').attr("disabled", true);
+				$("#uploadResponse").show('slow');
+				$('#uploadResponse').append("<img src='images/icons/ajax-loader.gif' />");
+		  		},
+				*/
+			  success: function(response) {   
+				if (response ==0){	 //Registration
+					$('#msg_manage_signatory').html("<div id='message' class='success'></div>"); 
+					$('#message').append("<img src='images/tick.png'/> Your request has been processed successfully !!!<br/>")
+					$('#message').hide()   
+					$('#message').fadeIn(500, function() {   
+					  $('#message').append(""); 
+					}); 
+					$('input[type=text]').val('');//to clear form values
+					$('input[type=password]').val('');//to clear form values
+					$('select').val('');
+				}
+				else if (response ==1){  //Registration
+					$('#msg_manage_signatory').html("<div id='message' class='success'></div>"); 
+					$('#message').append("<img src='images/cancel.png'/>  Error ocurred while processing request, please try again!!!<br/>")
+					$('#message').hide()   
+					$('#message').fadeIn(500, function() {   
+					  $('#message').append("");
+					}); 
+				}else if (response ==2){  //Registration
+					$('#msg_manage_signatory').html("<div id='message' class='success'></div>"); 
+					$('#message').append("<img src='images/cancel.png'/>An error occurred while processing request, contact administrator!!!<br/>")
+					$('#message').hide()   
+					$('#message').fadeIn(500, function() {   
+					  $('#message').append("");
+					}); 
+				}else if (response ==3){  //Registration
+					$('#msg_manage_signatory').html("<div id='message' class='success'></div>"); 
+					$('#message').append("<img src='images/cancel.png'/>This signatory has been initiated for approval before!!!<br/>")
+					$('#message').hide()   
+					$('#message').fadeIn(500, function() {   
+					  $('#message').append("");
+					}); 
+				}
+			  }
+			
+			});
+		return false;
+		}
+  	}); 
+
+	
+});
+
+
+  
+
+
